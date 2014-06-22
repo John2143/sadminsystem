@@ -15,6 +15,40 @@ addCommand("who",function(ply,args,silent)
 	end
 	sply = sply[1]
 	telltab(ply,formatString({"~",sply,":\n\tRank: ",sply:getGroup():getColor(),sply:getGroup():getName()},nil,true))
+	local equips = {"\tEquips:\n"}
+	for i,v in pairs(sply:getEquips()) do
+		table.insert(equips,"\t\t"..tostring(i).."\t")
+		if v:sub(1,5) == "__ref" then
+			local iid = tonumber(v:sub(6))
+			local item = ply:getItem(iid)
+			table.insert(equips,item:getRarityColor())
+			table.insert(equips,item:getName())
+			if item:getData("strangekills") then
+				table.insert(equips,RARITY[5])
+				table.insert(equips," (Kills: "..item:getData("strangekills")..")")
+			end
+			if item:getData("strangeparts") then
+				for i,v in pairs(item:getData("strangeparts")) do
+					table.insert(equips,RARITY[5])
+					table.insert(equips," ("..STRANGEPARTNAME[i]..": "..v..")")
+				end
+			end
+			if item:getData("baseeffect") then
+				table.insert(equips,RARITY[6])
+				local c = item:getData("effect").color or {r=-1,b=-1,g=-1}
+				table.insert(equips," ("..item:getData("baseeffect")..": ")
+				table.insert(equips,c)
+				table.insert(equips,c.r..", "..c.g..", "..c.b)
+				table.insert(equips,RARITY[6])
+				table.insert(equips,")")
+			end
+		else
+			table.insert(equips,Color(150,150,150))
+			table.insert(equips,v)
+		end
+		table.insert(equips,"\n")
+	end
+	telltab(ply,formatString(equips))
 end,true)
 addCommand("setrank",function(ply,args,silent)
 	local sply = getPlayers(ply,args[1])

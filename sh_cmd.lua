@@ -75,7 +75,7 @@ if !GROUP then
 		-- end
 	-- })
 	addGroup("guest",Color(150,150,150),"Guest",{"who"})
-	addGroup("mod",Color(53,120,255),"Mod",{"say","kick"},"guest")
+	addGroup("mod",Color(53,120,255),"Mod",{"say","kick","goto","bring"},"guest")
 	addGroup("admin",Color(200,0,0),"Admin",{"csay"},"mod")
 	addGroup("dev",Color(255,0,123),"Dev",{"rcon","setrank"},"admin")
 	-- PrintTable(GROUP)
