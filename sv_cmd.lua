@@ -82,7 +82,7 @@ function parseargs(text)
 	return args
 end
 
-function doCommand(self,cname,args)
+function doCommand(self,cname,args,sil)
 	if CLIENT then return end
 	local cando = false
 	local v = COMMANDS[cname]
@@ -106,16 +106,15 @@ function doCommand(self,cname,args)
 			-- PrintTable(args)
 		end
 		
-		v.func(self,args)
+		v.func(self,args,sil)
 	else
 		tellctab(self,"You cannot run that command.")
 	end
 end
-function META_player:doCommand(cname,args)
-	doCommand(self,cname,args)
+function META_player:doCommand(cname,args,sil)
+	doCommand(self,cname,args,sil)
 end
-
-concommand.Add("exc",function(ply,cmd,args)
+local function exccmd(ply,cmd,args,sil)
 	local cn = args[1]:lower()
 	if cn then
 		local newargs = {}
@@ -123,21 +122,27 @@ concommand.Add("exc",function(ply,cmd,args)
 			newargs[i-1] = args[i]
 		end
 		-- PrintTable(newargs)
-		doCommand(ply,cn,newargs)
+		doCommand(ply,cn,newargs,sil)
 	else
 		tellctab(ply,"Unknown command")
 	end
+end
+concommand.Add("exc",exccmd)
+concommand.Add("excs",function(ply,cmd,args)
+	exccmd(ply,cmd,args,true)
 end)
 
 hook.Add("PlayerSay","acommands",function(ply,text,team)
 	local sub = text:sub(1,1)
-	if sub == "!" or sub == "/" then
+	local silent
+	if sub == "!" or sub == "/" or sub == "~" or sub == "`" then
+		if sub == "~" or sub == "`" then silent = true end
 		local split = string.find(text," ")
 		if split then
 			local cmdstr = text:sub(2,split-1):lower()
-			ply:doCommand(cmdstr,text:sub(split+1))
+			ply:doCommand(cmdstr,text:sub(split+1),silent)
 		else
-			ply:doCommand(text:sub(2):lower(),nil)
+			ply:doCommand(text:sub(2):lower(),nil,silent)
 		end
 		return ""
 	end
