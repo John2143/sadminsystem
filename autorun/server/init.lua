@@ -25,7 +25,7 @@ resource.AddFile("sound/johns/cratestart.wav")
 resource.AddFile("sound/johns/cratecomplete.wav")
 resource.AddFile("sound/johns/notify.wav")
 --resource.AddWorkshop("272116853")
-include("preinit.lua")
+-- include("preinit.lua")
 print "CS Lua added"
 print "Starting filesystem..."
 include("fp.lua")

@@ -26,7 +26,7 @@ addCommand("setrank",function(ply,args,silent)
 	local gn = args[2]
 	if !GROUP[gn] then tellctab(ply,"That rank does not exist") return end
 	telltab(ply,formatcString{"You set the rank of ",sply," to ",GROUP[gn]:getColor(),GROUP[gn]:getName(),"."})
-	telltab(sply,formatcString{silent and NULL or ply, "has set your rank to ",GROUP[gn]:getColor(),GROUP[gn]:getName(),"."})
+	telltab(sply,formatcString{silent and NULL or ply, " has set your rank to ",GROUP[gn]:getColor(),GROUP[gn]:getName(),"."})
 	sply.group = gn
 	sply:save(1)
 end)
